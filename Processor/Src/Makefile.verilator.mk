@@ -44,6 +44,7 @@ VERILATOR_DISABLED_WARNING = \
      -Wno-WIDTH \
      -Wno-INITIALDLY \
      -Wno-UNOPTFLAT \
+     -Wno-MULTIDRIVEN \
 
 # RSD specific constants
 # RSD_SRC_CFG is defined in Makefiles/CoreSources.inc.mk
@@ -86,7 +87,7 @@ all: $(LIBRARY_WORK_RTL) $(DEPS_RTL) Makefiles/CoreSources.inc.mk
 	cd $(LIBRARY_WORK_RTL); \
 		VPATH=../../../Src \
 		CXXFLAGS="$(VERILATOR_TARGET_CXXFLAGS)" \
-			$(MAKE) -f $(VERILATED_TOP_MODULE_NAME).mk
+			$(MAKE) -f $(VERILATED_TOP_MODULE_NAME).mk VK_PCH_I_FAST= VK_PCH_I_SLOW=
 	@echo "==== Build Successful ===="
 
 run:
