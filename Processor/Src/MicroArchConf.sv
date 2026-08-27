@@ -89,7 +89,7 @@ localparam CONF_BRANCH_GLOBAL_HISTORY_BIT_WIDTH = 10;   // Global history length
 
 // Memory dependency predictor
 localparam CONF_MDT_ENTRY_NUM = 1024;   // The number of prediction table entries.
-localparam CONF_MDT_COUNTER_BIT_WIDTH = 2;   // V1-W2: counter width per entry (was 1 in V0)
+localparam CONF_MDT_COUNTER_BIT_WIDTH = 3;   // V1-W3: counter width per entry
 
 
 // --- D-cache
