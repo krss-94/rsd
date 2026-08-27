@@ -107,7 +107,7 @@ set proj_dir [get_property directory [current_project]]
 
 # Set project properties
 set obj [current_project]
-set_property -name "board_part" -value "em.avnet.com:zed:part0:1.4" -objects $obj
+set_property -name "board_part" -value "avnet-tria:zedboard:part0:1.5" -objects $obj
 set_property -name "default_lib" -value "xil_defaultlib" -objects $obj
 set_property -name "enable_vhdl_2008" -value "1" -objects $obj
 set_property -name "ip_cache_permissions" -value "read write" -objects $obj
@@ -135,6 +135,7 @@ set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "Verilog Header" -objects $file_obj
 set_property -name "is_global_include" -value "1" -objects $file_obj
+set_property include_dirs [list "$env(RSD_ROOT)/Processor/Src"] [get_filesets sources_1]
 
 
 # Set 'sources_1' fileset file properties for local files
