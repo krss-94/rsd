@@ -1,4 +1,4 @@
-// Copyright 2021- RSD contributors.
+﻿// Copyright 2021- RSD contributors.
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 
 
@@ -89,6 +89,7 @@ localparam CONF_BRANCH_GLOBAL_HISTORY_BIT_WIDTH = 10;   // Global history length
 
 // Memory dependency predictor
 localparam CONF_MDT_ENTRY_NUM = 1024;   // The number of prediction table entries.
+localparam CONF_MDT_COUNTER_BIT_WIDTH = 2;   // V1-W2: counter width per entry (was 1 in V0)
 
 
 // --- D-cache
@@ -120,4 +121,5 @@ localparam CONF_ICACHE_LINE_BYTE_NUM = 8;    // Line size
 
 
 endpackage : MicroArchConf
+
 

@@ -1,4 +1,4 @@
-// Copyright 2019- RSD contributors.
+﻿// Copyright 2019- RSD contributors.
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 
 
@@ -40,18 +40,18 @@ localparam ISSUE_QUEUE_FP_LATENCY      = FP_EXEC_STAGE_DEPTH + 2;
 localparam WAKEUP_WIDTH = INT_ISSUE_WIDTH + COMPLEX_ISSUE_WIDTH + LOAD_ISSUE_WIDTH + FP_ISSUE_WIDTH;    // Stores do not wakeup consumers.
 
 // --- Issue queue flush count
-// - 例外発生時に、発行キューは例外命令より後方の命令が選択的にフラッシュされる。
-//   その際、フリーリストへのインデックスの返却は専用のポートを介して複数サイクルで行われる。
-//   ISSUE_QUEUE_RESET_CYCLE はそのサイクル数を表す。
+// - ä¾‹å¤–ç™ºç”Ÿæ™‚ã«ã€ç™ºè¡Œã‚­ãƒ¥ãƒ¼ã¯ä¾‹å¤–å‘½ä»¤ã‚ˆã‚Šå¾Œæ–¹ã®å‘½ä»¤ãŒé¸æŠžçš„ã«ãƒ•ãƒ©ãƒƒã‚·ãƒ¥ã•ã‚Œã‚‹ã€‚
+//   ãã®éš›ã€ãƒ•ãƒªãƒ¼ãƒªã‚¹ãƒˆã¸ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®è¿”å´ã¯å°‚ç”¨ã®ãƒãƒ¼ãƒˆã‚’ä»‹ã—ã¦è¤‡æ•°ã‚µã‚¤ã‚¯ãƒ«ã§è¡Œã‚ã‚Œã‚‹ã€‚
+//   ISSUE_QUEUE_RESET_CYCLE ã¯ãã®ã‚µã‚¤ã‚¯ãƒ«æ•°ã‚’è¡¨ã™ã€‚
 localparam ISSUE_QUEUE_RETURN_INDEX_WIDTH = 2;
 localparam ISSUE_QUEUE_RETURN_INDEX_CYCLE
-    = (ISSUE_QUEUE_ENTRY_NUM-1) / ISSUE_QUEUE_RETURN_INDEX_WIDTH + 1; // 割り算して切り上げ
+    = (ISSUE_QUEUE_ENTRY_NUM-1) / ISSUE_QUEUE_RETURN_INDEX_WIDTH + 1; // å‰²ã‚Šç®—ã—ã¦åˆ‡ã‚Šä¸Šã’
 localparam ISSUE_QUEUE_RETURN_INDEX_CYCLE_BIT_SIZE
     = $clog2( ISSUE_QUEUE_RETURN_INDEX_CYCLE );
 
 // --- Issue queue reset count
 localparam ISSUE_QUEUE_RESET_CYCLE
-    = (ISSUE_QUEUE_ENTRY_NUM-1) / (ISSUE_WIDTH+ISSUE_QUEUE_RETURN_INDEX_WIDTH) + 1; // 割り算して切り上げ
+    = (ISSUE_QUEUE_ENTRY_NUM-1) / (ISSUE_WIDTH+ISSUE_QUEUE_RETURN_INDEX_WIDTH) + 1; // å‰²ã‚Šç®—ã—ã¦åˆ‡ã‚Šä¸Šã’
 localparam ISSUE_QUEUE_RESET_CYCLE_BIT_SIZE
     = $clog2( ISSUE_QUEUE_RESET_CYCLE );
 
@@ -142,7 +142,7 @@ endfunction
 // --- OpInfo of Integer Pipeline
 //
 
-// IntOpSubInfo と BrOpSubInfo のビット幅を合わせるための　padding の計算をする
+// IntOpSubInfo ã¨ BrOpSubInfo ã®ãƒ“ãƒƒãƒˆå¹…ã‚’åˆã‚ã›ã‚‹ãŸã‚ã®ã€€padding ã®è¨ˆç®—ã‚’ã™ã‚‹
 localparam INT_SUB_INFO_BIT_WIDTH = 
     $bits(OpOperandType) * 2 + $bits(IntALU_Code) + $bits(ShiftOperandType) + $bits(ShifterPath);
 localparam BR_SUB_INFO_BIT_WIDTH =
@@ -155,29 +155,29 @@ localparam INT_SUB_INFO_PADDING_BIT_WIDTH =
 typedef struct packed // IntOpInfo
 {
 
-    // 論理レジスタを読むかどうか
+    // è«–ç†ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’èª­ã‚€ã‹ã©ã†ã‹
     OpOperandType operandTypeA;
     OpOperandType operandTypeB;
 
     IntALU_Code aluCode;
 
-    // 即値
+    // å³å€¤
     ShiftOperandType shiftType;
     ShifterPath      shiftIn;
 
-    // BrOpSubInfo とビット幅を合わせるための padding
+    // BrOpSubInfo ã¨ãƒ“ãƒƒãƒˆå¹…ã‚’åˆã‚ã›ã‚‹ãŸã‚ã® padding
     logic [INT_SUB_INFO_PADDING_BIT_WIDTH-1:0] padding;
 } IntOpSubInfo;
 
 //
 typedef struct packed // BrOpInfo
 {
-    // 論理レジスタを読むかどうか
+    // è«–ç†ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’èª­ã‚€ã‹ã©ã†ã‹
     OpOperandType operandTypeA;
     OpOperandType operandTypeB;
 
     BranchPred bPred;
-    BranchDisplacement brDisp;        // 分岐ターゲット
+    BranchDisplacement brDisp;        // åˆ†å²ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 } BrOpSubInfo;
 
 typedef union packed    // IntOpInfo
@@ -213,7 +213,7 @@ typedef struct packed // IntIssueQueueEntry
 // 1+2=3
 typedef struct packed // MulOpInfo
 {
-    logic mulGetUpper; // 乗算で33-64bit目を結果とするか否か
+    logic mulGetUpper; // ä¹—ç®—ã§33-64bitç›®ã‚’çµæžœã¨ã™ã‚‹ã‹å¦ã‹
     IntMUL_Code mulCode;
 } MulOpSubInfo;
 
@@ -252,17 +252,17 @@ typedef struct packed // MemOpInfo
 {
     MemMicroOpSubType opType;
 
-    // 条件コード
+    // æ¡ä»¶ã‚³ãƒ¼ãƒ‰
     CondCode cond;
 
-    // 論理レジスタを読むかどうか
+    // è«–ç†ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’èª­ã‚€ã‹ã©ã†ã‹
     OpOperandType operandTypeA;
     OpOperandType operandTypeB;
 
-    // アドレッシング
+    // ã‚¢ãƒ‰ãƒ¬ãƒƒã‚·ãƒ³ã‚°
     AddrOperandImm addrIn;
-    logic isAddAddr;    // オフセット加算
-    logic isRegAddr;    // レジスタアドレッシング
+    logic isAddAddr;    // ã‚ªãƒ•ã‚»ãƒƒãƒˆåŠ ç®—
+    logic isRegAddr;    // ãƒ¬ã‚¸ã‚¹ã‚¿ã‚¢ãƒ‰ãƒ¬ãƒƒã‚·ãƒ³ã‚°
     MemAccessMode memAccessMode; // signed/unsigned and access size
 
     // CSR
@@ -311,7 +311,7 @@ typedef struct packed // FPOpInfo
     FPU_Code fpuCode;
     Rounding_Mode rm;
 
-    // 論理レジスタを読むかどうか
+    // è«–ç†ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’èª­ã‚€ã‹ã©ã†ã‹
     OpOperandType operandTypeA;
     OpOperandType operandTypeB;
     OpOperandType operandTypeC;
@@ -406,13 +406,13 @@ typedef logic [REPLAY_QUEUE_ENTRY_NUM_BIT_WIDTH : 0] ReplayQueueCountPath;
 
 // Memory Dependent Predictor
 localparam MDT_ENTRY_NUM = CONF_MDT_ENTRY_NUM;
+localparam MDT_COUNTER_BIT_WIDTH = CONF_MDT_COUNTER_BIT_WIDTH;
 localparam MDT_ENTRY_NUM_BIT_WIDTH = $clog2(MDT_ENTRY_NUM);
 typedef logic [MDT_ENTRY_NUM_BIT_WIDTH-1:0] MDT_IndexPath;
 
 typedef struct packed // struct MDT_Entry
 {
-    logic counter;
-    //logic [MDT_ENTRY_WIDTH-1:0] counter; // for expand counter width
+    logic [MDT_COUNTER_BIT_WIDTH-1:0] counter; // V1-W2: widened from 1 bit (V0) to 2 bits
 } MDT_Entry;
 
 function automatic MDT_IndexPath ToMDT_Index(PC_Path addr);
@@ -424,3 +424,4 @@ function automatic MDT_IndexPath ToMDT_Index(PC_Path addr);
 endfunction
 
 endpackage : SchedulerTypes
+

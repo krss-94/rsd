@@ -1,4 +1,4 @@
-// Copyright 2019- RSD contributors.
+﻿// Copyright 2019- RSD contributors.
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 
 
@@ -68,7 +68,7 @@ module MemoryDependencyPredictor(
             prediction[i] = TRUE;
 `else
             // Predict according to mdt entry
-            prediction[i] = mdtRV[i].counter;
+            prediction[i] = mdtRV[i].counter[MDT_COUNTER_BIT_WIDTH-1]; // MSB as prediction bit
 `endif
         end
 
@@ -83,7 +83,7 @@ module MemoryDependencyPredictor(
 
             // Learn memory order violation
             mdtWA[i] = ToMDT_Index(loadStoreUnit.conflictLoadPC[i]);
-            mdtWV[i].counter = TRUE;
+            mdtWV[i].counter = '1; // Saturate to max (V0-equivalent)
         end
 
         // In reset sequence, the write port 0 is used for initializing, and 
@@ -92,7 +92,7 @@ module MemoryDependencyPredictor(
             for (int i = 0; i < STORE_ISSUE_WIDTH; i++) begin
                 mdtWE[i] = (i == 0);
                 mdtWA[i] = resetIndex;
-                mdtWV[i].counter = FALSE;
+                mdtWV[i].counter = '0; // V0-equivalent
             end
 
             // To avoid writing to the same bank (avoid error message)
@@ -103,3 +103,4 @@ module MemoryDependencyPredictor(
     end
 
 endmodule : MemoryDependencyPredictor
+
