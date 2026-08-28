@@ -425,8 +425,8 @@ function automatic MDT_IndexPath ToMDT_Index(PC_Path addr);
         ];
 endfunction
 
-function automatic MDT_IndexPath ToMDT_IndexWithContext(PC_Path addr, MDT_ContextPath context);
-    return ToMDT_Index(addr) ^ MDT_IndexPath'(context);
+function automatic MDT_IndexPath ToMDT_IndexWithContext(PC_Path addr, MDT_ContextPath ctxBits);
+    return ToMDT_Index(addr) ^ MDT_IndexPath'(ctxBits);
 endfunction
 
 endpackage : SchedulerTypes
