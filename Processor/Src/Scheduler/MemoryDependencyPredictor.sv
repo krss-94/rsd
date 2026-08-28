@@ -68,7 +68,7 @@ module MemoryDependencyPredictor(
             prediction[i] = TRUE;
 `else
             // Predict according to mdt entry
-            prediction[i] = mdtRV[i].counter;
+            prediction[i] = mdtRV[i].counter && (mdtRV[i].tag == ToMDT_Tag(port.pc[0] + i*INSN_BYTE_WIDTH)); // Axis-B-T1: tag-checked prediction
 `endif
         end
 
@@ -84,6 +84,7 @@ module MemoryDependencyPredictor(
             // Learn memory order violation
             mdtWA[i] = ToMDT_Index(loadStoreUnit.conflictLoadPC[i]);
             mdtWV[i].counter = TRUE;
+            mdtWV[i].tag = ToMDT_Tag(loadStoreUnit.conflictLoadPC[i]);
         end
 
         // In reset sequence, the write port 0 is used for initializing, and 
@@ -93,6 +94,7 @@ module MemoryDependencyPredictor(
                 mdtWE[i] = (i == 0);
                 mdtWA[i] = resetIndex;
                 mdtWV[i].counter = FALSE;
+                mdtWV[i].tag = '0;
             end
 
             // To avoid writing to the same bank (avoid error message)
