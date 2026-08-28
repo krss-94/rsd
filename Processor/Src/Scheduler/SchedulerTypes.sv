@@ -408,6 +408,8 @@ typedef logic [REPLAY_QUEUE_ENTRY_NUM_BIT_WIDTH : 0] ReplayQueueCountPath;
 localparam MDT_ENTRY_NUM = CONF_MDT_ENTRY_NUM;
 localparam MDT_ENTRY_NUM_BIT_WIDTH = $clog2(MDT_ENTRY_NUM);
 typedef logic [MDT_ENTRY_NUM_BIT_WIDTH-1:0] MDT_IndexPath;
+localparam MDT_CONTEXT_BIT_WIDTH = CONF_MDT_CONTEXT_BIT_WIDTH;
+typedef logic [MDT_CONTEXT_BIT_WIDTH-1:0] MDT_ContextPath;
 
 typedef struct packed // struct MDT_Entry
 {
@@ -421,6 +423,10 @@ function automatic MDT_IndexPath ToMDT_Index(PC_Path addr);
             MDT_ENTRY_NUM_BIT_WIDTH + INSN_ADDR_BIT_WIDTH - 1: 
             INSN_ADDR_BIT_WIDTH
         ];
+endfunction
+
+function automatic MDT_IndexPath ToMDT_IndexWithContext(PC_Path addr, MDT_ContextPath context);
+    return ToMDT_Index(addr) ^ MDT_IndexPath'(context);
 endfunction
 
 endpackage : SchedulerTypes

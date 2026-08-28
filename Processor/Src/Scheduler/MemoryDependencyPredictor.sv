@@ -52,12 +52,23 @@ module MemoryDependencyPredictor(
         end
     end
 
+    // History register for context-augmented indexing (gshare-style).
+    MDT_ContextPath history;
+    always_ff @(posedge port.clk) begin
+        if (port.rst) begin
+            history <= '0;
+        end
+        else begin
+            history <= (history << 1) | MDT_ContextPath'(|loadStoreUnit.memAccessOrderViolation);
+        end
+    end
+
     always_comb begin
 
         // Process read request
         for (int i = 0; i < RENAME_WIDTH; i++) begin
             // convert PC_Path to MDT_IndexPath
-            mdtRA[i] = ToMDT_Index(port.pc[0] + i*INSN_BYTE_WIDTH);
+            mdtRA[i] = ToMDT_IndexWithContext(port.pc[0] + i*INSN_BYTE_WIDTH, history);
         end
 
         // Decide whether issue speculatively
@@ -82,7 +93,7 @@ module MemoryDependencyPredictor(
                 loadStoreUnit.memAccessOrderViolation[i];
 
             // Learn memory order violation
-            mdtWA[i] = ToMDT_Index(loadStoreUnit.conflictLoadPC[i]);
+            mdtWA[i] = ToMDT_IndexWithContext(loadStoreUnit.conflictLoadPC[i], history);
             mdtWV[i].counter = TRUE;
         end
 
