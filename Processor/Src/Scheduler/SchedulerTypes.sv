@@ -408,11 +408,13 @@ typedef logic [REPLAY_QUEUE_ENTRY_NUM_BIT_WIDTH : 0] ReplayQueueCountPath;
 localparam MDT_ENTRY_NUM = CONF_MDT_ENTRY_NUM;
 localparam MDT_ENTRY_NUM_BIT_WIDTH = $clog2(MDT_ENTRY_NUM);
 typedef logic [MDT_ENTRY_NUM_BIT_WIDTH-1:0] MDT_IndexPath;
+localparam MDT_TAG_BIT_WIDTH = CONF_MDT_TAG_BIT_WIDTH;
+typedef logic [MDT_TAG_BIT_WIDTH-1:0] MDT_TagPath;
 
 typedef struct packed // struct MDT_Entry
 {
     logic counter;
-    //logic [MDT_ENTRY_WIDTH-1:0] counter; // for expand counter width
+    MDT_TagPath tag; // Axis-B-T1: added tag field (0 bits in V0)
 } MDT_Entry;
 
 function automatic MDT_IndexPath ToMDT_Index(PC_Path addr);
@@ -420,6 +422,14 @@ function automatic MDT_IndexPath ToMDT_Index(PC_Path addr);
         addr[
             MDT_ENTRY_NUM_BIT_WIDTH + INSN_ADDR_BIT_WIDTH - 1: 
             INSN_ADDR_BIT_WIDTH
+        ];
+endfunction
+
+function automatic MDT_TagPath ToMDT_Tag(PC_Path addr);
+    return
+        addr[
+            MDT_TAG_BIT_WIDTH + MDT_ENTRY_NUM_BIT_WIDTH + INSN_ADDR_BIT_WIDTH - 1:
+            MDT_ENTRY_NUM_BIT_WIDTH + INSN_ADDR_BIT_WIDTH
         ];
 endfunction
 
