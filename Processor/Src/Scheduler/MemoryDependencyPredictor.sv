@@ -59,7 +59,7 @@ module MemoryDependencyPredictor(
             history <= '0;
         end
         else begin
-            history <= (history << 1) | MDT_ContextPath'(|loadStoreUnit.memAccessOrderViolation);
+            history <= (history << 1) | MDT_ContextPath'(loadStoreUnit.memAccessOrderViolation[0]);
         end
     end
 
