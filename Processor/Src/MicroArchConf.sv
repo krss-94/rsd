@@ -89,7 +89,7 @@ localparam CONF_BRANCH_GLOBAL_HISTORY_BIT_WIDTH = 10;   // Global history length
 
 // Memory dependency predictor
 localparam CONF_MDT_ENTRY_NUM = 1024;   // The number of prediction table entries.
-localparam CONF_MDT_TAG_BIT_WIDTH = 8;   // Axis-B-T8: tag width per entry
+localparam CONF_MDT_TAG_BIT_WIDTH = 7;   // Axis-B-T7: tag width per entry (max supported given PC_WIDTH=19)
 
 
 // --- D-cache
