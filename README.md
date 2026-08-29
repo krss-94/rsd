@@ -1,3 +1,29 @@
+# RSD Memory-Dependence Predictor: Hardware Cost Study (Fork)
+
+This fork extends [RSD](https://github.com/rsd-devel/rsd) (Mashimo et al., FPT/ICFPT 2019) for a research study measuring the real FPGA hardware cost of memory-dependence predictor design choices, on a Xilinx Zynq-7000 target.
+
+**Research question:** does synthesized hardware cost scale with a predictor's raw storage-bit budget, or does *what the bits are used for* dominate real cost?
+
+**Summary:** no — cost is governed by synthesis-tool primitive-inference thresholds, not bit count. See [`docs/results.md`](docs/results.md) for the full technical results and [`docs/explainer.md`](docs/explainer.md) for a plain-language walkthrough of the whole project.
+
+## Branches
+| Branch | Contents |
+|---|---|
+| `mdp-hardware-cost-study` | Counter-width sweep (1/2/3/4-bit saturating counter) |
+| `axis-a-capacity` | Table-capacity sweep (32/64/128/256/1024 entries) |
+| `axis-b-tag-bits` | Tag-bit sweep (0 through 7 bits, max supported) |
+| `axis-c-context-bits` | Gshare-style context/history indexing sweep |
+| `axis-combined` | Tag + context combined |
+
+Each milestone is also tagged (`v0-baseline`, `axis-a-counter-final`, `axis-a-capacity-final`, `axis-b-tag-final`, `axis-c-context-final`, `axis-combined-final`).
+
+All modifications are isolated to `Processor/Src/MicroArchConf.sv`, `Processor/Src/Scheduler/SchedulerTypes.sv`, and `Processor/Src/Scheduler/MemoryDependencyPredictor.sv`, plus three documented Vivado 2026.1 compatibility fixes to the synthesis Tcl scripts (unrelated to the RTL study — see `docs/results.md` methodology notes). RSD's own license (Apache 2.0) and copyright headers are unchanged.
+
+---
+
+## Original RSD README follows below
+
+
 # RSD RISC-V Out-of-Order Superscalar Processor 
 
 RSD is a 32-bit RISC-V out-of-order superscalar processor core.
@@ -88,3 +114,4 @@ packages in accordance with the licenses presented in THIRD-PARTY-LICENSES.md.
 
 Susumu Mashimo et al., "An Open Source FPGA-Optimized Out-of-Order RISC-V Soft 
 Processor", IEEE International Conference on Field-Programmable Technology (FPT), 2019. A pre-print version is [here](https://www.rsg.ci.i.u-tokyo.ac.jp/members/shioya/pdfs/Mashimo-FPT'19.pdf).
+
