@@ -88,7 +88,7 @@ localparam CONF_PHT_ENTRY_NUM = 2048;
 localparam CONF_BRANCH_GLOBAL_HISTORY_BIT_WIDTH = 10;   // Global history length for g-share 
 
 // Memory dependency predictor
-localparam CONF_MDT_ENTRY_NUM = 64;   // Axis-A-CAP64: table capacity
+localparam CONF_MDT_ENTRY_NUM = 32;   // Axis-A-CAP32: table capacity
 
 
 // --- D-cache
